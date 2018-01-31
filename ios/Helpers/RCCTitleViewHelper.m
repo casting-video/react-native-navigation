@@ -170,7 +170,8 @@ navigationController:(UINavigationController*)navigationController
     subtitleLabel.textAlignment = NSTextAlignmentCenter;
     subtitleLabel.backgroundColor = [UIColor clearColor];
     
-    NSMutableDictionary *subtitleAttributes = [RCTHelpers textAttributesFromDictionary:style withPrefix:@"navBarSubtitle" baseFont:[UIFont systemFontOfSize:14.f]];
+    NSMutableDictionary *subtitleAttributes =
+      [RCTHelpers textAttributesFromDictionary:style withPrefix:@"navBarSubtitle" baseFont:[UIFont systemFontOfSize:10 weight:UIFontWeightRegular]];
     [subtitleLabel setAttributedText:[[NSAttributedString alloc] initWithString:self.subtitle attributes:subtitleAttributes]];
     
     CGSize labelSize = [subtitleLabel.text sizeWithAttributes:subtitleAttributes];
@@ -196,17 +197,18 @@ navigationController:(UINavigationController*)navigationController
     titleLabel.textAlignment = NSTextAlignmentCenter;
     titleLabel.backgroundColor = [UIColor clearColor];
     
-    UIFont *titleFont = [UIFont boldSystemFontOfSize:17.f];
+    UIFont *titleFont = [UIFont systemFontOfSize:17.f weight:UIFontWeightSemibold];
     
     id fontSize = style[@"navBarTitleFontSize"];
     if (fontSize) {
         CGFloat fontSizeFloat = [RCTConvert CGFloat:fontSize];
-        titleFont = [UIFont boldSystemFontOfSize:fontSizeFloat];
+        titleFont = [UIFont systemFontOfSize:fontSizeFloat weight:UIFontWeightSemibold];
     }
     
     titleLabel.font = titleFont;
     
-    NSMutableDictionary *titleAttributes = [RCTHelpers textAttributesFromDictionary:style withPrefix:@"navBarTitle" baseFont:[UIFont systemFontOfSize:14.f]];
+    NSMutableDictionary *titleAttributes =
+      [RCTHelpers textAttributesFromDictionary:style withPrefix:@"navBarTitle" baseFont:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]];
     [titleLabel setAttributedText:[[NSAttributedString alloc] initWithString:self.title attributes:titleAttributes]];
     
     CGSize labelSize = [titleLabel.text sizeWithAttributes:@{NSFontAttributeName:titleFont}];

@@ -362,12 +362,16 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
     viewController.navigationController.navigationBar.barTintColor = nil;
   }
   
-  NSMutableDictionary *titleTextAttributes = [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarText" baseFont:[UIFont boldSystemFontOfSize:17]];
+  NSMutableDictionary *titleTextAttributes =
+    [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarText" baseFont:[UIFont systemFontOfSize:17 weight:UIFontWeightSemibold]];
   [self.navigationController.navigationBar setTitleTextAttributes:titleTextAttributes];
   
-  NSMutableDictionary *navButtonTextAttributes = [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarButton"];
-  NSMutableDictionary *leftNavButtonTextAttributes = [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarLeftButton"];
-  NSMutableDictionary *rightNavButtonTextAttributes = [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarRightButton"];
+  NSMutableDictionary *navButtonTextAttributes =
+    [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarButton" baseFont:[UIFont systemFontOfSize:17 weight:UIFontWeightRegular]];
+  NSMutableDictionary *leftNavButtonTextAttributes =
+    [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarLeftButton" baseFont:[UIFont systemFontOfSize:17 weight:UIFontWeightRegular]];
+  NSMutableDictionary *rightNavButtonTextAttributes =
+    [RCTHelpers textAttributesFromDictionary:self.navigatorStyle withPrefix:@"navBarRightButton" baseFont:[UIFont systemFontOfSize:17 weight:UIFontWeightRegular]];
   
   if (
       navButtonTextAttributes.allKeys.count > 0 ||

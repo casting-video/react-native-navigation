@@ -188,7 +188,7 @@
     
     UIFont *font = [RCTFont updateFont:baseFont withFamily:fontFamily size:fontSize weight:fontWeight style:fontStyle variant:nil scaleMultiplier:1];
     
-    if (font && (fontStyle || fontWeight || fontSize || fontFamily)) {
+    if (font) {
         [textAttributes setObject:font forKey:NSFontAttributeName];
     }
     
