@@ -454,7 +454,7 @@ const NSInteger TRANSPARENT_NAVBAR_TAG = 78264803;
   if (finalColorScheme && [finalColorScheme isEqualToString:@"light"]) {
     
     if (!statusBarTextColorSchemeSingleScreen) {
-      viewController.navigationController.navigationBar.barStyle = UIBarStyleBlack;
+      viewController.navigationController.navigationBar.barStyle = UIBarStyleBlackTranslucent;
     }
     
     self._statusBarTextColorSchemeLight = true;
