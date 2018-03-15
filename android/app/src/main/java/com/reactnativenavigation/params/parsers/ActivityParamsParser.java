@@ -32,7 +32,11 @@ public class ActivityParamsParser extends Parser {
             result.rightSideMenuParams = sideMenus[SideMenu.Side.Right.ordinal()];
         }
 
-        result.animateShow = params.getBoolean("animateShow", true);
+        if (hasKey(params, "overlay")) {
+            result.overlayParams =  OverlayParamsParser.parse(params.getBundle("overlay"));
+        }
+
+        result.animateShow = params.getBoolean(PARAM_ANIMATE_SHOW, true);
 
         return result;
     }
