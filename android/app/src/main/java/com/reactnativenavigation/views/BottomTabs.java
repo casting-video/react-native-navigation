@@ -17,7 +17,12 @@ import java.util.List;
 
 public class BottomTabs extends AHBottomNavigation {
 
+    abstract public static class VisibilityListener {
+        abstract public void onVisibilityChanged(boolean hidden, boolean animated);
+    }
+
     private VisibilityAnimator visibilityAnimator;
+    private VisibilityListener visibilityListener;
 
     public BottomTabs(Context context) {
         super(context);
@@ -107,6 +112,9 @@ public class BottomTabs extends AHBottomNavigation {
     }
 
     public void setVisibility(boolean hidden, boolean animated) {
+        if (visibilityListener != null) {
+            visibilityListener.onVisibilityChanged(hidden, animated);
+        }
         if (visibilityAnimator != null) {
             visibilityAnimator.setVisible(!hidden, animated, null);
         } else {
@@ -167,5 +175,9 @@ public class BottomTabs extends AHBottomNavigation {
         if(AppStyle.appStyle.bottomTabSelectedFontSize != null &&  AppStyle.appStyle.bottomTabFontSize != null) {
             setTitleTextSizeInSp(AppStyle.appStyle.bottomTabSelectedFontSize, AppStyle.appStyle.bottomTabFontSize);
         }
+    }
+
+    public void setVisibilityListener(VisibilityListener listener) {
+        visibilityListener = listener;
     }
 }

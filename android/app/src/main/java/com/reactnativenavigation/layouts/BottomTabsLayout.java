@@ -36,13 +36,13 @@ import com.reactnativenavigation.screens.ScreenStack;
 import com.reactnativenavigation.utils.Task;
 import com.reactnativenavigation.utils.ViewUtils;
 import com.reactnativenavigation.views.BottomTabs;
-import com.reactnativenavigation.views.ContentView;
 import com.reactnativenavigation.views.LightBox;
 import com.reactnativenavigation.views.SideMenu;
 import com.reactnativenavigation.views.SideMenu.Side;
 import com.reactnativenavigation.views.SnackbarAndFabContainer;
 import com.reactnativenavigation.views.slidingOverlay.SlidingOverlay;
 import com.reactnativenavigation.views.slidingOverlay.SlidingOverlaysQueue;
+import com.reactnativenavigation.views.BottomTabsOverlay;
 
 import java.util.List;
 
@@ -64,6 +64,7 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
     SideMenu sideMenu;
     private int currentStackIndex = 0;
     private LightBox lightBox;
+    private BottomTabsOverlay overlayView;
 
     public BottomTabsLayout(AppCompatActivity activity, ActivityParams params) {
         super(activity);
@@ -78,11 +79,11 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         createSideMenu();
         createBottomTabs();
         addBottomTabs();
-        addOverlay();
         addScreenStacks();
         createSnackbarContainer();
         showInitialScreenStack();
         setInitialTabIndex();
+        addOverlay();
     }
 
     private void setInitialTabIndex() {
@@ -136,12 +137,19 @@ public class BottomTabsLayout extends BaseLayout implements AHBottomNavigation.O
         if (params.overlayParams == null) {
             return false;
         }
-        ContentView overlayView = new ContentView(getContext(), params.overlayParams.screenId, params.overlayParams.navigationParams);
-        LayoutParams lp2 = new LayoutParams(params.overlayParams.width, params.overlayParams.height);
-        overlayView.setX(params.overlayParams.left);
-        overlayView.setY(params.overlayParams.top);
-        getScreenStackParent().addView(overlayView, lp2);
-
+        final float scale = getContext().getResources().getDisplayMetrics().density;
+        overlayView = new BottomTabsOverlay(getContext(), params.overlayParams.screenId, params.overlayParams.navigationParams);
+        LayoutParams lp = new LayoutParams((int) (100 * scale + 0.5f), 0);
+        lp.addRule(ALIGN_PARENT_BOTTOM);
+        lp.addRule(CENTER_HORIZONTAL);
+        lp.addRule(ALIGN_TOP, bottomTabs.getId());
+        getScreenStackParent().addView(overlayView, lp);
+        bottomTabs.setVisibilityListener(new BottomTabs.VisibilityListener() {
+            @Override
+            public void onVisibilityChanged(boolean hidden, boolean animated) {
+                overlayView.setVisibility(hidden, animated);
+            }
+        });
         return true;
     }
 

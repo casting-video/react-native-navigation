@@ -36,7 +36,7 @@ public class ActivityParamsParser extends Parser {
             result.overlayParams =  OverlayParamsParser.parse(params.getBundle("overlay"));
         }
 
-        result.animateShow = params.getBoolean(PARAM_ANIMATE_SHOW, true);
+        result.animateShow = params.getBoolean("animateShow", true);
 
         return result;
     }
