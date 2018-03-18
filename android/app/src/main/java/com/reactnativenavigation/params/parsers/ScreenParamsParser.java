@@ -18,6 +18,7 @@ public class ScreenParamsParser extends Parser {
     private static final String KEY_SCREEN_ID = "screenId";
     private static final String KEY_TIMESTAMP = "timestamp";
     private static final String KEY_NAVIGATION_PARAMS = "navigationParams";
+    private static final String KEY_DISABLED = "disabled";
     private static final String STYLE_PARAMS = "styleParams";
     private static final String TOP_TABS = "topTabs";
     private static final String FRAGMENT_CREATOR_CLASS_NAME = "fragmentCreatorClassName";
@@ -55,6 +56,7 @@ public class ScreenParamsParser extends Parser {
 
         result.tabLabel = getTabLabel(params);
         result.tabIcon = new TabIconParser(params).parse();
+        result.disabled = params.getBoolean(KEY_DISABLED);
 
         result.animateScreenTransitions = new AnimationParser(params).parse();
         result.sharedElementsTransitions = getSharedElementsTransitions(params);
