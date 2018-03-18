@@ -14,7 +14,9 @@
 
 @end
 
-@implementation RCCTabBarController
+@implementation RCCTabBarController {
+  UIView *overlay;
+}
 
 
 -(UIInterfaceOrientationMask)supportedInterfaceOrientations {
@@ -71,20 +73,6 @@
   return newImage;
 }
 
-- (void)viewWillLayoutSubviews {
-  int height = 75;
-
-  CGSize screenSize = [[UIScreen mainScreen] bounds].size;
-  if (screenSize.height == 812) {
-    height = 85;
-  }
-
-  CGRect tabFrame = self.tabBar.frame; //self.TabBar is IBOutlet of your TabBar
-  tabFrame.size.height = height;
-  tabFrame.origin.y = self.view.frame.size.height - height;
-  self.tabBar.frame = tabFrame;
-}
-
 - (instancetype)initWithProps:(NSDictionary *)props children:(NSArray *)children globalProps:(NSDictionary*)globalProps bridge:(RCTBridge *)bridge
 {
   self = [super init];
@@ -99,7 +87,6 @@
   UIColor *labelColor = nil;
   UIColor *selectedLabelColor = nil;
   NSDictionary *tabsStyle = props[@"style"];
-  NSDictionary *overlayConfig = props[@"overlay"];
 
   if (tabsStyle)
   {
@@ -189,7 +176,10 @@
     viewController.tabBarItem = [[UITabBarItem alloc] initWithTitle:title image:iconImage tag:0];
     viewController.tabBarItem.accessibilityIdentifier = tabItemLayout[@"props"][@"testID"];
     viewController.tabBarItem.selectedImage = iconImageSelected;
-    
+    if ([RCTConvert BOOL:tabItemLayout[@"props"][@"disabled"]]) {
+      viewController.tabBarItem.enabled = NO;
+    }
+
     id imageInsets = tabItemLayout[@"props"][@"iconInsets"];
     if (imageInsets && imageInsets != (id)[NSNull null])
     {
@@ -232,28 +222,6 @@
     [viewControllers addObject:viewController];
   }
   
-  //render overlay
-  if (overlayConfig) {
-    RCTRootView *overlayView = [[RCTRootView alloc] initWithBridge:bridge
-                                                        moduleName:overlayConfig[@"screen"]
-                                                 initialProperties:overlayConfig[@"passProps"]];
-
-    id overlayPositions = overlayConfig[@"position"];
-    id leftInset = overlayPositions[@"left"];
-    id topInset = overlayPositions[@"top"];
-    id heightInset = overlayPositions[@"height"];
-    id widthInset = overlayPositions[@"width"];
-
-    CGFloat left = leftInset != (id)[NSNull null] ? [RCTConvert CGFloat:leftInset] : 0;
-    CGFloat height = heightInset != (id)[NSNull null] ? [RCTConvert CGFloat:heightInset] : 0;
-    CGFloat width = widthInset != (id)[NSNull null] ? [RCTConvert CGFloat:widthInset] : 0;
-    CGFloat top = topInset != (id)[NSNull null] ? [RCTConvert CGFloat:topInset] : 0;
-
-    overlayView.frame = CGRectMake(left, top, width, height);
-    overlayView.backgroundColor = UIColor.clearColor;
-    [self.view addSubview:overlayView];
-  }
-
   // replace the tabs
   self.viewControllers = viewControllers;
 
@@ -266,6 +234,60 @@
   
   [self setRotation:props];
   
+  // render overlay
+  NSDictionary *overlayConfig = props[@"overlay"];
+  if (overlayConfig) {
+    overlay = [[RCTRootView alloc] initWithBridge:bridge
+                                       moduleName:overlayConfig[@"screen"]
+                                initialProperties:overlayConfig[@"passProps"]];
+    overlay.backgroundColor = UIColor.clearColor;
+    overlay.translatesAutoresizingMaskIntoConstraints = NO;
+    [self.tabBar addSubview:overlay];
+    [NSLayoutConstraint
+     constraintWithItem:overlay
+     attribute:NSLayoutAttributeTop
+     relatedBy:NSLayoutRelationEqual
+     toItem:self.tabBar
+     attribute:NSLayoutAttributeTop
+     multiplier:1
+     constant:0].active = YES;
+    if (@available(iOS 11, *)) {
+      [NSLayoutConstraint
+       constraintWithItem:overlay
+       attribute:NSLayoutAttributeBottom
+       relatedBy:NSLayoutRelationEqual
+       toItem:self.tabBar.safeAreaLayoutGuide
+       attribute:NSLayoutAttributeBottom
+       multiplier:1
+       constant:0].active = YES;
+    } else {
+      [NSLayoutConstraint
+       constraintWithItem:overlay
+       attribute:NSLayoutAttributeHeight
+       relatedBy:NSLayoutRelationEqual
+       toItem:self.tabBar
+       attribute:NSLayoutAttributeHeight
+       multiplier:1
+       constant:0].active = YES;
+    }
+    [NSLayoutConstraint
+     constraintWithItem:overlay
+     attribute:NSLayoutAttributeCenterX
+     relatedBy:NSLayoutRelationEqual
+     toItem:self.tabBar
+     attribute:NSLayoutAttributeCenterX
+     multiplier:1
+     constant:0].active = YES;
+    [NSLayoutConstraint
+     constraintWithItem:overlay
+     attribute:NSLayoutAttributeWidth
+     relatedBy:NSLayoutRelationEqual
+     toItem:nil
+     attribute:NSLayoutAttributeNotAnAttribute
+     multiplier:1
+     constant:100].active = YES;
+  }
+
   return self;
 }
 
