@@ -107,6 +107,7 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
         setStatusBarHidden(styleParams.statusBarHidden);
         setStatusBarTextColorScheme(styleParams.statusBarTextColorScheme);
         setNavigationBarColor(styleParams.navigationBarColor);
+        setNavigationBarTextColorScheme(styleParams.navigationBarTextColorScheme);
         setDrawUnderStatusBar(styleParams.drawUnderStatusBar);
         topBar.setStyle(styleParams);
         if (styleParams.screenBackgroundColor.hasColor()) {
@@ -186,6 +187,10 @@ public abstract class Screen extends RelativeLayout implements Subscriber {
 
     public void setNavigationBarColor(StyleParams.Color navigationBarColor) {
         NavigationBar.setColor(((NavigationActivity) activity).getScreenWindow(), navigationBarColor);
+    }
+
+    public void setNavigationBarTextColorScheme(StatusBarTextColorScheme textColorScheme) {
+        NavigationBar.setTextColorScheme(this, textColorScheme);
     }
 
     public abstract void unmountReactView();

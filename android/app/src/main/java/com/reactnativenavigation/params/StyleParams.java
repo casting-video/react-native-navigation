@@ -156,6 +156,7 @@ public class StyleParams {
     public Integer bottomTabSelectedFontSize;
 
     public Color navigationBarColor;
+    public StatusBarTextColorScheme navigationBarTextColorScheme;
 
     public boolean hasTopBarCustomComponent() {
         return !TextUtils.isEmpty(topBarReactView);

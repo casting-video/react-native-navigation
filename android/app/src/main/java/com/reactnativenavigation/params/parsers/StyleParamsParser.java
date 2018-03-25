@@ -99,6 +99,8 @@ public class StyleParamsParser {
         result.bottomTabBadgeBackgroundColor = getColor("bottomTabBadgeBackgroundColor", getBottomTabBadgeBackgroundColor());
 
         result.navigationBarColor = getColor("navigationBarColor", getDefaultNavigationColor());
+        result.navigationBarTextColorScheme = StatusBarTextColorScheme.fromString(params.getString("navigationBarTextColorScheme"),
+            getDefaultNavigationBarTextColorScheme());
         result.forceTitlesDisplay = getBoolean("forceTitlesDisplay", getDefaultForceTitlesDisplay());
 
         result.bottomTabFontFamily = getFont("bottomTabFontFamily", getDefaultBottomTabsFontFamily());
@@ -114,6 +116,10 @@ public class StyleParamsParser {
 
     private StatusBarTextColorScheme getDefaultStatusBarTextColorScheme() {
         return AppStyle.appStyle == null ? StatusBarTextColorScheme.Undefined : AppStyle.appStyle.statusBarTextColorScheme;
+    }
+
+    private StatusBarTextColorScheme getDefaultNavigationBarTextColorScheme() {
+        return AppStyle.appStyle == null ? StatusBarTextColorScheme.Undefined : AppStyle.appStyle.navigationBarTextColorScheme;
     }
 
     private String getDefaultOrientation() {

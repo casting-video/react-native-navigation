@@ -231,7 +231,8 @@ function convertStyleParams(originalStyleObject) {
     bottomTabFontSize: originalStyleObject.tabFontSize,
     bottomTabSelectedFontSize: originalStyleObject.selectedTabFontSize,
 
-    navigationBarColor: processColor(originalStyleObject.navigationBarColor)
+    navigationBarColor: processColor(originalStyleObject.navigationBarColor),
+    navigationBarTextColorScheme: originalStyleObject.navigationBarTextColorScheme,
   };
 
   if (originalStyleObject.disabledButtonColor) {
