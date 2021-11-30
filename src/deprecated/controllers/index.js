@@ -137,6 +137,29 @@ var Controllers = {
       _validateDrawerProps(layout);
       console.log('set root');
       _processProperties(_.get(layout, 'props.appStyle', {}));
+
+      // FIX: '__self' in objects can not be passed over the RN bridge
+      var cleanup = function(obj) {
+        for (var k in obj) {
+          if (k === '__self') {
+            delete obj[k];
+          } else {
+            var v = obj[k];
+            if (typeof v === 'object') {
+              if (v instanceof Array) {
+                var len = v.length;
+                for (var i = 0; i < len; i++) {
+                  cleanup(v[i]);
+                }
+              } else if (v !== null) {
+                cleanup(v);
+              }
+            }
+          }
+        }
+      };
+      cleanup(layout);
+
       return await RCCManager.setRootController(layout, animationType, passProps);
     },
     getLaunchArgs: async function() {
