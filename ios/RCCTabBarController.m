@@ -121,6 +121,21 @@
             self.tabBar.translucent = [tabBarTranslucent boolValue] ? YES : NO;
         }
         
+        if (@available(iOS 15.0, *)) {
+            UITabBarAppearance *appearance = [[UITabBarAppearance alloc] init];
+            if (tabBarBackgroundColor) {
+                UIColor *color = tabBarBackgroundColor != (id)[NSNull null] ? [RCTConvert UIColor:tabBarBackgroundColor] : nil;
+                appearance.backgroundColor = color;
+            }
+            if (tabBarTranslucent && [tabBarTranslucent boolValue]) {
+                [appearance configureWithDefaultBackground];
+            } else {
+                [appearance configureWithOpaqueBackground];
+            }
+            self.tabBar.standardAppearance = appearance;
+            self.tabBar.scrollEdgeAppearance = appearance;
+        }
+
         NSString *tabBarHideShadow = tabsStyle[@"tabBarHideShadow"];
         if (tabBarHideShadow) {
             self.tabBar.clipsToBounds = [tabBarHideShadow boolValue] ? YES : NO;
